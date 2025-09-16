@@ -49,7 +49,7 @@ export const portfolioConfig: PortfolioConfig = {
   navigation: [
     { id: "intro", label: "Intro", href: "#intro" },
     { id: "projects", label: "Projects", href: "#projects" },
-    { id: "fitness", label: "Fitness", href: "#fitness" },
+    { id: "work", label: "Work", href: "#work" },
     { id: "about", label: "About", href: "#about" },
     { id: "contact", label: "Contact", href: "#contact" }
   ],

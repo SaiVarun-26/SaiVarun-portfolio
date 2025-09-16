@@ -1,7 +1,7 @@
 import Layout from '@/components/Layout';
 import Hero from '@/components/sections/Hero';
 import Projects from '@/components/sections/Projects';
-import Fitness from '@/components/sections/Fitness';
+import WorkExperience from '@/components/sections/WorkExperience';
 import About from '@/components/sections/About';
 import Contact from '@/components/sections/Contact';
 
@@ -10,7 +10,7 @@ const Index = () => {
     <Layout>
       <Hero />
       <Projects />
-      <Fitness />
+      <WorkExperience />
       <About />
       <Contact />
     </Layout>
