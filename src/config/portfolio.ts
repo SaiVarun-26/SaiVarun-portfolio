@@ -41,10 +41,10 @@ export const portfolioConfig: PortfolioConfig = {
     name: "Sai Varun",
     shortName: "SV",
     tagline: "B.Tech Student | Software Developer | Data Analyst | Science-Based Lifter",
-    heroText: "I'm Sai Varun, a developer in progress who loves turning ideas into user-friendly apps, exploring data, and pushing myself both in tech and fitness.",
+    heroText: "I’m Sai Varun, exploring software development, data, and design while growing step by step, inside and outside of tech, with curiosity and consistency.",
     about: "I'm a B.Tech student in India. I am passionate about software development and data analysis. I am gaining skills in building applications and exploring machine learning. I take pride in creating user-friendly projects and using technology to solve real-world problems. I also follow a science-based approach to fitness and training.",
     location: "India",
-    email: "hello@saivarun.dev"
+    email: "saivarun.ksvt@gmail.com"
   },
   navigation: [
     { id: "intro", label: "Intro", href: "#intro" },
@@ -58,38 +58,38 @@ export const portfolioConfig: PortfolioConfig = {
       id: "seat-finder",
       title: "Seat Finder",
       description: "A web application that helps students find available seats in libraries and study spaces. Built with real-time availability tracking and user-friendly interface.",
-      technologies: ["React", "Node.js", "MongoDB", "Socket.io"],
+      technologies: ["React", "Node.js"],
       status: "completed"
     },
     {
       id: "portfolio-website",
       title: "Portfolio Website",
-      description: "Personal portfolio website showcasing my work and skills. Features smooth animations, responsive design, and modern aesthetics.",
+      description: "Personal portfolio website showcasing my work and skills. Features smooth animations, responsive design, and minimal aesthetics.",
       technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
       status: "completed"
     },
     {
-      id: "data-analysis-tools",
-      title: "Data Analysis Tools",
-      description: "Collection of data analysis and visualization tools for exploring datasets and generating insights. Focus on machine learning applications.",
-      technologies: ["Python", "Pandas", "Matplotlib", "Scikit-learn"],
-      status: "in-progress"
+  id: "weather-app",
+  title: "Weather App",
+  description: "When the user inputs the city, the weather and temperature will be displayed using the OpenWeatherMap API.",
+  technologies: ["JavaScript", "React", "OpenWeatherMap API"],
+  status: "completed"
     }
   ],
   socialLinks: [
     {
       name: "Email",
-      url: "mailto:hello@saivarun.dev",
+      url: "mailto:saivarun.ksvt@gmail.com",
       icon: "Mail"
     },
     {
       name: "LinkedIn",
-      url: "https://linkedin.com/in/saivarun",
+      url: "https://www.linkedin.com/in/sai-varun-tej",
       icon: "Linkedin"
     },
     {
       name: "GitHub",
-      url: "https://github.com/saivarun",
+      url: "https://github.com/SaiVarun-26",
       icon: "Github"
     }
   ],
