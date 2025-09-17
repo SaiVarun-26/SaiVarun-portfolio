@@ -42,7 +42,7 @@ export const portfolioConfig: PortfolioConfig = {
     shortName: "SV",
     tagline: "B.Tech Student | Software Developer | Data Enthusiast | Science-Based Lifter",
     heroText: "I’m Sai Varun, exploring software development, data, and design while growing step by step, inside and outside of tech, with curiosity and consistency.",
-    about: "I'm a B.Tech student in India. I am passionate about software development and data analysis. I am gaining skills in building applications and exploring machine learning. I take pride in creating user-friendly projects and using technology to solve real-world problems. I also follow a science-based approach to fitness and training.",
+    about: "Aspiring Software Developer and Data Analyst currently pursuing a B.Tech in India. I am establishing a strong foundation in application development, data analysis, and machine learning. I focus on creating user-friendly solutions and using technology to tackle real-world problems. Outside of tech, I follow a science-based approach to fitness and training. I apply the same discipline and analytical mindset to my personal growth.",
     location: "India",
     email: "saivarun.ksvt@gmail.com"
   },
@@ -55,9 +55,9 @@ export const portfolioConfig: PortfolioConfig = {
   ],
   projects: [
     {
-      id: "seat-finder",
-      title: "Seat Finder",
-      description: "A web application that helps students find available seats in libraries and study spaces. Built with real-time availability tracking and user-friendly interface.",
+      id: "ExamVenue",
+      title: "ExamVenue",
+      description: "Exam hall searches are made easier with ExamVenue, which gives you the block and room number up front. Students save time and effort by not having to scroll through numerous PDFs",
       technologies: ["React", "Node.js"],
       status: "completed"
     },
