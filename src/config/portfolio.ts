@@ -40,7 +40,7 @@ export const portfolioConfig: PortfolioConfig = {
   personal: {
     name: "Sai Varun",
     shortName: "SV",
-    tagline: "B.Tech Student | Software Developer | Data Analyst | Science-Based Lifter",
+    tagline: "B.Tech Student | Software Developer | Data Enthusiast | Science-Based Lifter",
     heroText: "I’m Sai Varun, exploring software development, data, and design while growing step by step, inside and outside of tech, with curiosity and consistency.",
     about: "I'm a B.Tech student in India. I am passionate about software development and data analysis. I am gaining skills in building applications and exploring machine learning. I take pride in creating user-friendly projects and using technology to solve real-world problems. I also follow a science-based approach to fitness and training.",
     location: "India",
