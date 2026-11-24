@@ -17,6 +17,30 @@ type IntroPhase =
   | "glide" // name gliding up into its hero resting position
   | "done"; // experience live
 
+/**
+ * The intro sequence itself is untouched. Only its playback is gated: it
+ * plays on the first visit in a browser tab and never again on refresh or
+ * on returning within that tab. A new tab is a new session, so it plays.
+ */
+const INTRO_SESSION_KEY = "svt:intro-played:v1";
+
+function introAlreadyPlayed(): boolean {
+  try {
+    return window.sessionStorage.getItem(INTRO_SESSION_KEY) === "1";
+  } catch {
+    // Private mode / blocked storage: behave like a first visit.
+    return false;
+  }
+}
+
+function rememberIntroPlayed() {
+  try {
+    window.sessionStorage.setItem(INTRO_SESSION_KEY, "1");
+  } catch {
+    // Storage unavailable — nothing to remember.
+  }
+}
+
 type LayoutProps = {
   children: React.ReactNode;
   /** Notifies the page when the hero copy (headline/subtitle) may reveal. */
@@ -37,7 +61,10 @@ type LayoutProps = {
  */
 export function Layout({ children, onReady }: LayoutProps) {
   const reduced = usePrefersReducedMotion();
-  const [phase, setPhase] = useState<IntroPhase>(reduced ? "done" : "black");
+  // Decided once on mount: a refresh in the same tab goes straight to
+  // the live page, with no flash of the intro.
+  const [skipIntro] = useState(introAlreadyPlayed);
+  const [phase, setPhase] = useState<IntroPhase>(skipIntro ? "done" : "black");
 
   // The hero must be laid out from the glide onward so the shared-layout
   // name has a destination to travel to.
@@ -55,10 +82,20 @@ export function Layout({ children, onReady }: LayoutProps) {
 
   // Drive the intro timeline.
   useEffect(() => {
-    if (reduced) {
+    if (skipIntro) {
       onReady?.(true);
       return;
     }
+
+    if (reduced) {
+      setPhase("done");
+      onReady?.(true);
+      return;
+    }
+
+    // Remember it as soon as it starts, so a refresh mid-intro does not
+    // replay it either.
+    rememberIntroPlayed();
 
     const toName = introTiming.blackHold;
     const toGlide = toName + introTiming.nameReveal + introTiming.namePause;
@@ -78,7 +115,7 @@ export function Layout({ children, onReady }: LayoutProps) {
 
     return () => timers.forEach(clearTimeout);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reduced]);
+  }, [reduced, skipIntro]);
 
   const handleLogoClick = () => {
     document.getElementById("hero")?.scrollIntoView({ behavior: "smooth" });

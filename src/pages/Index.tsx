@@ -6,6 +6,7 @@ import { WorkExperience } from "@/components/sections/WorkExperience";
 import { Projects } from "@/components/sections/Projects";
 import { Fitness } from "@/components/sections/Fitness";
 import { Contact } from "@/components/sections/Contact";
+import { Footer } from "@/components/sections/Footer";
 
 const Index = () => {
   // `ready` flips true once the intro finishes docking the logo,
@@ -20,6 +21,7 @@ const Index = () => {
       <Projects />
       <Fitness />
       <Contact />
+      <Footer />
     </Layout>
   );
 };

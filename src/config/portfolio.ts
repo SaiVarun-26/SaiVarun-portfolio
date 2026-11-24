@@ -23,6 +23,7 @@ export const navItems: NavItem[] = [
 ];
 
 export const about = {
+  eyebrow: "About",
   title: "Why I build what I build.",
   subtitle:
     "Most of what I know, I learned by building something and getting it wrong first.",
@@ -162,54 +163,135 @@ export const experiences: Experience[] = [
 ];
 
 export const selectedWork = {
+  eyebrow: "Projects",
   title: "Selected Work",
   subtitle: "A collection of products built to solve real-world problems.",
 };
 
-export type Project = {
-  title: string;
-  description: string;
-  tech: string[];
-  year: string;
-  /** Path under /public, e.g. "/projects/data-lens.png". Optional. */
-  image?: string;
-  github?: string;
-  live?: string;
+export type ProjectAction = {
+  label: string;
+  /** Omit while a link is still a placeholder — it renders as a quiet button. */
+  href?: string;
+  /** The first action is filled; the rest are outlined. */
+  variant?: "primary" | "ghost";
 };
 
-// NOTE: years and links below are placeholders. Replace with real ones.
+export type Project = {
+  /** Two-digit display index, e.g. "01". */
+  number: string;
+  title: string;
+  subtitle?: string;
+  description: string[];
+  tech: string[];
+  badges: string[];
+  status?: "in-progress" | "completed";
+  /** The flagship project gets the largest visual presence. */
+  featured?: boolean;
+  /** Which placeholder mockup to draw when no `image` is provided. */
+  visual: "ridesync" | "yathri" | "brick" | "research";
+  /** Path under /public, e.g. "/projects/data-lens.png". Optional. */
+  image?: string;
+  actions: ProjectAction[];
+};
+
+// NOTE: links marked as placeholders are intentionally not wired up yet.
 export const projects: Project[] = [
   {
-    title: "Everyday Friction",
-    description:
-      "A collection of small tools that remove repetitive tasks from daily workflows.",
-    tech: ["React", "TypeScript", "Tailwind"],
-    year: "2025",
-    github: "https://github.com",
+    number: "01",
+    title: "RideSync",
+    description: [
+      "RideSync is an open-source Flutter application built for motorcycle group rides. It lets riders create rides, invite friends, and track everyone's live location in real time so the entire group stays together.",
+      "The app records ride statistics, maps every journey, and generates a shareable ride summary after each ride.",
+    ],
+    tech: ["Flutter", "Firebase", "Riverpod", "OpenStreetMap", "Dart"],
+    badges: ["Featured", "Open Source"],
+    featured: true,
+    visual: "ridesync",
+    actions: [
+      { label: "GitHub", href: "https://github.com/SaiVarun-26/Ridesync" },
+      {
+        label: "Website",
+        href: "https://ridesync-live.vercel.app/#home",
+        variant: "ghost",
+      },
+    ],
   },
   {
-    title: "Data Lens",
-    description:
-      "An exploratory analytics interface that turns raw datasets into clear, interactive stories.",
-    tech: ["Python", "Pandas", "D3"],
-    year: "2025",
-    github: "https://github.com",
+    number: "02",
+    title: "Yathri",
+    subtitle: "AI-Powered Travel Data Capture Platform",
+    description: [
+      "Built as part of Smart India Hackathon. Yathri automatically detects trips using smartphone sensors, classifies transport modes, maintains a smart travel diary, and generates mobility insights while preserving user privacy.",
+      "It is designed to help governments improve transport planning while also providing meaningful travel insights to everyday users.",
+    ],
+    tech: [
+      "Flutter",
+      "FastAPI",
+      "Machine Learning",
+      "GPS",
+      "Activity Recognition",
+    ],
+    badges: [],
+    status: "in-progress",
+    visual: "yathri",
+    actions: [
+      { label: "GitHub", href: "https://github.com/SaiVarun-26/Yathri-App" },
+    ],
   },
   {
-    title: "Motion System",
-    description:
-      "A reusable animation layer focused on restrained, purposeful interface motion.",
-    tech: ["Framer Motion", "React"],
-    year: "2024",
-    github: "https://github.com",
+    number: "03",
+    title: "Brick Management System",
+    description: [
+      "A management platform designed for brick manufacturing businesses.",
+      "The system streamlines production tracking, inventory management, customer records, sales, and reporting through one centralized dashboard.",
+    ],
+    tech: ["React", "FastAPI", "PostgreSQL"],
+    badges: [],
+    status: "completed",
+    visual: "brick",
+    actions: [
+      {
+        label: "GitHub",
+        href: "https://github.com/cherryhash-99/FLYSHBRICKS-MANAGEMENT-SYM",
+      },
+    ],
+  },
+  {
+    number: "04",
+    title: "DNA Sequence Storage Quality Assessment",
+    subtitle: "Research Paper",
+    description: [
+      "A machine learning research project focused on evaluating DNA data storage quality.",
+      "The research explores feature extraction, explainable AI, and predictive models to improve the reliability of DNA-based digital storage systems.",
+    ],
+    tech: [],
+    badges: ["Published Research"],
+    visual: "research",
+    actions: [
+      {
+        label: "Read Paper",
+        href: "/projects/dna-research-paper.pdf",
+        variant: "primary",
+      },
+      { label: "Presentation", variant: "ghost" },
+    ],
   },
 ];
 
+export const projectsOutro = {
+  text: "Every project pushed me to learn something new. I'm excited to build what's next.",
+  action: { label: "View GitHub", href: "https://github.com/SaiVarun-26" },
+};
+
 export const contact = {
-  email: "hello@saivaruntej.dev",
+  email: "k.saivaruntej@gmail.com",
   socials: [
-    { label: "GitHub", url: "https://github.com" },
-    { label: "LinkedIn", url: "https://linkedin.com" },
-    { label: "X", url: "https://x.com" },
+    { label: "GitHub", url: "https://github.com/SaiVarun-26" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/sai-varun-tej/" },
   ],
+};
+
+export const footer = {
+  tagline: "Building software that solves real problems.",
+  status: "Open to internships & opportunities.",
 };

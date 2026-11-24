@@ -7,6 +7,11 @@ type SectionProps = {
   id: string;
   children: ReactNode;
   className?: string;
+  /**
+   * Full viewport height with the content centred. Turn this off for a
+   * short interlude so the page keeps scrolling without a blank screen.
+   */
+  fullHeight?: boolean;
 };
 
 /**
@@ -15,7 +20,7 @@ type SectionProps = {
  * view. Registers a ref so the page can observe it for active-nav state.
  */
 export const Section = forwardRef<HTMLElement, SectionProps>(
-  ({ id, children, className }, ref) => {
+  ({ id, children, className, fullHeight = true }, ref) => {
     const reduced = usePrefersReducedMotion();
 
     const hidden = reduced
@@ -42,7 +47,9 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
         id={id}
         ref={ref}
         data-section={id}
-        className={`relative flex min-h-screen w-full items-center justify-center px-8 py-28 ${className ?? ""}`}
+        className={`relative flex w-full items-center justify-center px-8 py-28 ${
+          fullHeight ? "min-h-screen" : ""
+        } ${className ?? ""}`}
       >
         <motion.div
           className="w-full"

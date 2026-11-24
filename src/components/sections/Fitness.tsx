@@ -7,7 +7,7 @@ import { Section } from "@/components/Section";
  */
 export const Fitness = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <Section id="fitness" ref={ref}>
+    <Section id="fitness" ref={ref} fullHeight={false}>
       <div className="mx-auto max-w-[760px]">
         <p
           className="mb-10 text-sm font-medium uppercase tracking-[0.25em]"
