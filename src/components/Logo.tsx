@@ -1,57 +1,75 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { portfolioConfig } from '@/config/portfolio';
+import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { profile } from "@/config/portfolio";
+import { spring } from "@/lib/motion";
 
-const Logo = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const handleClick = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  return (
-    <div className="fixed top-8 left-8 z-50">
-      <motion.button
-        onClick={handleClick}
-        className="flex items-center justify-start font-bold text-2xl text-foreground hover:text-hero-accent transition-colors duration-300 focus:outline-none"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <AnimatePresence mode="wait">
-          {!isExpanded ? (
-            <motion.span
-              key="short"
-              initial={{ opacity: 0, width: 0 }}
-              animate={{ opacity: 1, width: "auto" }}
-              exit={{ opacity: 0, width: 0 }}
-              transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="overflow-hidden whitespace-nowrap"
-            >
-              {portfolioConfig.personal.shortName}
-            </motion.span>
-          ) : (
-            <motion.span
-              key="full"
-              initial={{ opacity: 0, width: 0 }}
-              animate={{ 
-                opacity: 1, 
-                width: "auto",
-                transition: { duration: 0.4, ease: "easeInOut" }
-              }}
-              exit={{ 
-                opacity: 0, 
-                width: 0,
-                transition: { duration: 0.3, ease: "easeInOut" }
-              }}
-              className="overflow-hidden whitespace-nowrap"
-            >
-              {portfolioConfig.personal.name}
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
-    </div>
-  );
+type LogoProps = {
+  onClick?: () => void;
 };
 
-export default Logo;
+/**
+ * The docked logo. Reads "SVT" at rest and expands horizontally to the
+ * full name on hover using width interpolation — no tooltip, no popover.
+ * The extra letters fade in naturally as the container grows.
+ */
+export function Logo({ onClick }: LogoProps) {
+  const [hovered, setHovered] = useState(false);
+
+  // The three "anchor" initials stay put; the remaining letters of
+  // each word fade in on hover to spell the full name.
+  const parts = [
+    { initial: "S", rest: "ai" },
+    { initial: "V", rest: "arun" },
+    { initial: "T", rest: "ej" },
+  ];
+
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      aria-label={profile.fullName}
+      className="group relative flex items-center overflow-hidden whitespace-nowrap text-left text-[17px] font-semibold tracking-[0.02em] text-foreground outline-none"
+      transition={spring.micro}
+    >
+      <span className="flex items-baseline">
+        {parts.map((part, i) => (
+          <span key={part.initial} className="flex items-baseline">
+            {i > 0 && (
+              <AnimatePresence initial={false}>
+                {hovered && (
+                  <motion.span
+                    initial={{ width: 0, opacity: 0 }}
+                    animate={{ width: "auto", opacity: 1 }}
+                    exit={{ width: 0, opacity: 0 }}
+                    transition={spring.micro}
+                    className="inline-block overflow-hidden"
+                  >
+                    &nbsp;
+                  </motion.span>
+                )}
+              </AnimatePresence>
+            )}
+            <span>{part.initial}</span>
+            <AnimatePresence initial={false}>
+              {hovered && (
+                <motion.span
+                  initial={{ width: 0, opacity: 0, filter: "blur(4px)" }}
+                  animate={{ width: "auto", opacity: 1, filter: "blur(0px)" }}
+                  exit={{ width: 0, opacity: 0, filter: "blur(4px)" }}
+                  transition={spring.micro}
+                  className="inline-block overflow-hidden"
+                >
+                  {part.rest}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </span>
+        ))}
+      </span>
+    </motion.button>
+  );
+}

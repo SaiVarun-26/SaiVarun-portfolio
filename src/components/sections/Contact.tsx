@@ -1,81 +1,61 @@
-import { motion } from 'framer-motion';
-import { Mail, Linkedin, Github } from 'lucide-react';
-import { portfolioConfig } from '@/config/portfolio';
+import { forwardRef } from "react";
+import { motion } from "framer-motion";
+import { Section } from "@/components/Section";
+import { contact } from "@/config/portfolio";
+import { spring } from "@/lib/motion";
 
-const Contact = () => {
-  const iconMap = {
-    Mail,
-    Linkedin,
-    Github,
-  };
-
+export const Contact = forwardRef<HTMLElement>((_, ref) => {
   return (
-    <section id="contact" className="section">
-      <div className="container mx-auto px-8 text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="mb-16"
+    <Section id="contact" ref={ref}>
+      <div className="mx-auto max-w-[760px] text-center">
+        <p
+          className="mb-10 text-sm font-medium uppercase tracking-[0.25em]"
+          style={{ color: "hsl(var(--muted-foreground))" }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">Let's Connect</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            I'm always open to discussing new opportunities, interesting projects, 
-            or just having a chat about technology and development.
-          </p>
-        </motion.div>
+          Contact
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-8 max-w-md mx-auto"
+        <h2
+          className="font-black text-foreground"
+          style={{
+            fontSize: "clamp(40px, 7vw, 88px)",
+            lineHeight: 0.95,
+            letterSpacing: "-0.02em",
+          }}
         >
-          {portfolioConfig.socialLinks.map((link, index) => {
-            const IconComponent = iconMap[link.icon as keyof typeof iconMap];
-            
-            return (
-              <motion.a
-                key={link.name}
-                href={link.url}
-                target={link.name !== 'Email' ? '_blank' : undefined}
-                rel={link.name !== 'Email' ? 'noopener noreferrer' : undefined}
-                className="group flex items-center gap-3 px-6 py-3 bg-card border border-subtle-border rounded-lg hover:border-muted-foreground/30 transition-all duration-300 hover:scale-105"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                viewport={{ once: true }}
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <IconComponent 
-                  size={20} 
-                  className="text-muted-foreground group-hover:text-foreground transition-colors duration-300" 
-                />
-                <span className="text-muted-foreground group-hover:text-foreground transition-colors duration-300 font-medium">
-                  {link.name}
-                </span>
-              </motion.a>
-            );
-          })}
-        </motion.div>
+          Let's build
+          <br />
+          something.
+        </h2>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          viewport={{ once: true }}
-          className="mt-16"
+        <motion.a
+          href={`mailto:${contact.email}`}
+          className="mt-12 inline-flex items-center gap-2 text-[clamp(18px,2vw,22px)] font-medium text-foreground outline-none"
+          whileHover={{ opacity: 0.7 }}
+          transition={spring.micro}
         >
-          <p className="text-muted-foreground">
-            {portfolioConfig.footer.copyright}
-          </p>
-        </motion.div>
+          {contact.email}
+        </motion.a>
+
+        <div className="mt-14 flex items-center justify-center gap-8">
+          {contact.socials.map((s) => (
+            <motion.a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-medium tracking-[0.02em] outline-none"
+              style={{ color: "hsl(var(--muted-foreground))" }}
+              whileHover={{ color: "hsl(0 0% 100%)" }}
+              transition={spring.micro}
+            >
+              {s.label}
+            </motion.a>
+          ))}
+        </div>
       </div>
-    </section>
+    </Section>
   );
-};
+});
 
-export default Contact;
+Contact.displayName = "Contact";

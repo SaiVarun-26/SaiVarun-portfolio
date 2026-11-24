@@ -1,94 +1,146 @@
-import { motion } from 'framer-motion';
-import { Code, BarChart3, GraduationCap, MapPin } from 'lucide-react';
-import { portfolioConfig } from '@/config/portfolio';
+import { forwardRef } from "react";
+import { motion, type Variants } from "framer-motion";
+import { Dumbbell, GraduationCap, Hammer, Layers, type LucideIcon } from "lucide-react";
+import { about } from "@/config/portfolio";
+import { spring } from "@/lib/motion";
+import { usePrefersReducedMotion } from "@/hooks/use-reduced-motion";
 
-const About = () => {
-  const highlights = [
-    {
-      icon: GraduationCap,
-      title: "B.Tech Student",
-      description: "Currently pursuing my degree in India, gaining comprehensive knowledge in computer science and engineering."
-    },
-    {
-      icon: Code,
-      title: "Software Development",
-      description: "Building user-friendly applications with modern technologies like React, TypeScript, and Node.js."
-    },
-    {
-      icon: BarChart3,
-      title: "Data Analysis",
-      description: "Exploring machine learning and data visualization to extract insights from complex datasets."
-    },
-    {
-      icon: MapPin,
-      title: "Based in India",
-      description: "Working on projects that solve real-world problems while building my technical expertise."
-    }
-  ];
+const icons: Record<string, LucideIcon> = {
+  hammer: Hammer,
+  layers: Layers,
+  graduation: GraduationCap,
+  dumbbell: Dumbbell,
+};
+
+// One rhythm for every gap around and between the cards.
+const gap = "clamp(14px,1.4vw,20px)";
+
+/**
+ * About: centered title, one supporting sentence, one large content
+ * card, and four small cards beneath it.
+ *
+ * Motion uses a single system, the hero's spring and 120ms cadence:
+ * title → sentence → content card → small cards. Everything plays once.
+ */
+export const About = forwardRef<HTMLElement>((_, ref) => {
+  const reduced = usePrefersReducedMotion();
+  const step = 0.12;
+
+  // The one reveal used by every element in this section.
+  const reveal = (delay: number): Variants =>
+    reduced
+      ? {
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { duration: 0.5, delay } },
+        }
+      : {
+          hidden: { opacity: 0, y: 24, filter: "blur(8px)" },
+          visible: {
+            opacity: 1,
+            y: 0,
+            filter: "blur(0px)",
+            transition: { ...spring.soft, delay },
+          },
+        };
 
   return (
-    <section id="about" className="section">
-      <div className="container mx-auto px-8">
+    <section
+      id="about"
+      data-section="about"
+      ref={ref}
+      className="relative w-full px-6 pb-[clamp(96px,12vw,160px)] pt-[clamp(48px,6vw,96px)] sm:px-8"
+    >
+      <div className="mx-auto flex w-full max-w-[1000px] flex-col items-center">
+        {/* Title, sentence, content card */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+          className="flex w-full flex-col items-center text-center"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "0px 0px -8% 0px" }}
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">About Me</h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A developer in progress, passionate about creating meaningful solutions
-          </p>
+          <motion.h2
+            variants={reveal(0)}
+            className="max-w-[900px] text-balance text-[clamp(42px,5vw,72px)] font-bold leading-none tracking-[-0.04em] text-foreground"
+          >
+            {about.title}
+          </motion.h2>
+
+          <motion.p
+            variants={reveal(step)}
+            className="mt-[clamp(24px,2.6vw,36px)] max-w-[34rem] text-balance text-[18px] font-medium leading-[1.6] md:text-[20px]"
+            style={{ color: "#A1A1AA" }}
+          >
+            {about.subtitle}
+          </motion.p>
+
+          <motion.div
+            variants={reveal(step * 2)}
+            className="mt-[clamp(44px,5vw,72px)] w-full max-w-[860px] rounded-[28px] border p-[clamp(28px,4.6vw,64px)] text-left"
+            style={{
+              backgroundColor: "rgba(255,255,255,0.03)",
+              borderColor: "rgba(255,255,255,0.08)",
+            }}
+          >
+            {/* Reading column: about 60 characters per line, centred in
+                the card so the text never hugs one side. */}
+            <div className="mx-auto flex max-w-[40rem] flex-col gap-[clamp(24px,2.4vw,34px)]">
+              {about.paragraphs.map((text, i) => (
+                <p
+                  key={i}
+                  className="text-[18px] font-medium leading-[1.8] md:text-[20px] min-[1440px]:text-[21px]"
+                  style={{ color: "#D4D4D8" }}
+                >
+                  {text}
+                </p>
+              ))}
+            </div>
+          </motion.div>
         </motion.div>
 
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="bg-card border border-subtle-border rounded-lg p-8 mb-12"
-          >
-            <p className="text-lg text-muted-foreground leading-relaxed">
-              {portfolioConfig.personal.about}
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="grid md:grid-cols-2 gap-8"
-          >
-            {highlights.map((item, index) => (
-              <motion.div
-                key={item.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 * index }}
-                viewport={{ once: true }}
-                className="group flex items-start gap-4 p-6 bg-card border border-subtle-border rounded-lg hover:border-muted-foreground/30 transition-all duration-300"
+        {/* Small cards: their own trigger, so they reveal when seen. */}
+        <motion.ul
+          className="grid w-full max-w-[860px] grid-cols-1 sm:grid-cols-2 lg:grid-cols-4"
+          style={{ marginTop: gap, gap }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "0px 0px -8% 0px" }}
+        >
+          {about.cards.map((card, i) => {
+            const Icon = icons[card.icon];
+            return (
+              <motion.li
+                key={card.title}
+                variants={reveal(0.05 + i * 0.08)}
+                className="list-none"
               >
-                <div className="p-3 bg-secondary rounded-lg group-hover:bg-accent transition-colors duration-300">
-                  <item.icon size={24} className="text-secondary-foreground group-hover:text-accent-foreground" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="text-lg font-semibold mb-2 text-foreground group-hover:text-hero-accent transition-colors duration-300">
-                    {item.title}
+                {/* Hover lives on the inner element so it never competes
+                    with the reveal transform on the <li>. */}
+                <div className="flex h-full flex-col rounded-[20px] border border-white/[0.08] bg-white/[0.02] p-[clamp(18px,1.8vw,24px)] transition-[transform,background-color,border-color] duration-300 ease-out hover:-translate-y-[3px] hover:border-white/[0.16] hover:bg-white/[0.04] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+                  {Icon && (
+                    <Icon
+                      size={20}
+                      strokeWidth={1.5}
+                      aria-hidden="true"
+                      style={{ color: "#A1A1AA" }}
+                    />
+                  )}
+                  <h3 className="mt-5 text-[15px] font-semibold tracking-[0.01em] text-white">
+                    {card.title}
                   </h3>
-                  <p className="text-muted-foreground">
-                    {item.description}
+                  <p
+                    className="mt-1.5 text-[15px] font-medium leading-[1.55]"
+                    style={{ color: "#A1A1AA" }}
+                  >
+                    {card.text}
                   </p>
                 </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
+              </motion.li>
+            );
+          })}
+        </motion.ul>
       </div>
     </section>
   );
-};
+});
 
-export default About;
+About.displayName = "About";

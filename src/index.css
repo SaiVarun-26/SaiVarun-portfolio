@@ -2,176 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Design System - Sleek Dark Portfolio Theme */
+/* ───────────────────────────────────────────────
+   Premium minimalist design system
+   Pure black canvas · white type · neutral gray
+─────────────────────────────────────────────── */
 @layer base {
   :root {
-    /* Dark theme colors - sophisticated black and white palette */
-    --background: 0 0% 2%;
-    --foreground: 0 0% 98%;
-    
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 98%;
-    
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 98%;
-    
-    --primary: 0 0% 98%;
-    --primary-foreground: 0 0% 2%;
-    
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 0 0% 90%;
-    
-    --muted: 0 0% 6%;
-    --muted-foreground: 0 0% 60%;
-    
-    --accent: 0 0% 10%;
-    --accent-foreground: 0 0% 98%;
-    
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    
-    --border: 0 0% 15%;
-    --input: 0 0% 10%;
-    --ring: 0 0% 20%;
-    
-    --radius: 0.5rem;
-    
-    /* Portfolio specific colors */
-    --nav-hover: 0 0% 12%;
-    --hero-accent: 0 0% 85%;
-    --subtle-border: 0 0% 8%;
-    
-    /* Fonts */
-    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+
+    --muted-foreground: 240 5% 65%; /* ~ #A1A1AA */
+    --border: 0 0% 100%;
+
+    --radius: 0.75rem;
+
+    --font-main: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   }
-  
+
   * {
-    @apply border-border;
+    border-color: hsl(var(--border) / 0.08);
   }
-  
+
   html {
     scroll-behavior: smooth;
   }
-  
-  body {
-    @apply bg-background text-foreground font-main antialiased;
-    overflow-x: hidden;
-  }
-  
-  /* Scrollbar styling */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: hsl(var(--background));
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.3);
-    border-radius: 3px;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.5);
-  }
-}
 
-@layer components {
-  /* Hero text styling */
-  .hero-text {
-    @apply text-5xl md:text-6xl lg:text-7xl font-bold leading-tight tracking-tight;
-    color: hsl(var(--foreground));
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-main);
+    overflow-x: hidden;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    text-rendering: optimizeLegibility;
   }
-  
-  /* Navigation styles */
-  .nav-link {
-    @apply relative text-lg font-medium text-muted-foreground transition-colors duration-300 hover:text-foreground;
+
+  /* During the intro the whole experience is locked down:
+     no scrolling, no scrollbar, nothing but the name. */
+  body[data-intro="active"] {
+    overflow: hidden;
   }
-  
-  .nav-link.active {
-    @apply text-foreground;
+
+  body[data-intro="active"] ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
-  
-  .nav-link::after {
-    content: '';
-    @apply absolute left-0 bottom-0 h-0.5 w-0 bg-foreground transition-all duration-300;
+
+  /* Minimal scrollbar once the experience is live */
+  ::-webkit-scrollbar {
+    width: 7px;
   }
-  
-  .nav-link:hover::after,
-  .nav-link.active::after {
-    @apply w-full;
+  ::-webkit-scrollbar-track {
+    background: transparent;
   }
-  
-  /* Section styling */
-  .section {
-    @apply min-h-screen flex items-center justify-center px-8 py-16;
+  ::-webkit-scrollbar-thumb {
+    background: hsl(0 0% 100% / 0.12);
+    border-radius: 999px;
   }
-  
-  /* Animated underline */
-  .animated-underline {
-    @apply relative inline-block;
-  }
-  
-  .animated-underline::after {
-    content: '';
-    @apply absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-500;
-  }
-  
-  .animated-underline:hover::after {
-    @apply w-full;
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(0 0% 100% / 0.22);
   }
 }
 
 @layer utilities {
-  /* Custom animations */
-  .fade-in {
-    animation: fadeIn 0.8s ease-out forwards;
+  /* Masked upward character reveal container */
+  .reveal-mask {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: top;
   }
-  
-  .slide-up {
-    animation: slideUp 0.8s ease-out forwards;
+
+  /* Animated film grain overlay */
+  .film-grain {
+    position: fixed;
+    inset: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    opacity: 0.035;
+    z-index: 50;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain 0.6s steps(2) infinite;
   }
-  
-  .stagger-delay-1 {
-    animation-delay: 0.1s;
-  }
-  
-  .stagger-delay-2 {
-    animation-delay: 0.2s;
-  }
-  
-  .stagger-delay-3 {
-    animation-delay: 0.3s;
-  }
-  
-  .stagger-delay-4 {
-    animation-delay: 0.4s;
-  }
-  
-  .stagger-delay-5 {
-    animation-delay: 0.5s;
+
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+@keyframes grain {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -4%); }
+  60% { transform: translate(-2%, 3%); }
+  80% { transform: translate(4%, -2%); }
+  100% { transform: translate(0, 0); }
 }
 
-@keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px);
+/* Respect users who prefer reduced motion: strip the ambient
+   motion layers; component-level motion is handled in JS. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .film-grain {
+    animation: none;
   }
 }

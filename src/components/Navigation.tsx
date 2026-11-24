@@ -1,64 +1,78 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { portfolioConfig } from '@/config/portfolio';
+import { motion } from "framer-motion";
+import { navItems } from "@/config/portfolio";
+import { spring } from "@/lib/motion";
 
-const Navigation = () => {
-  const [activeSection, setActiveSection] = useState('intro');
+type NavigationProps = {
+  activeId: string;
+  onNavigate: (id: string) => void;
+  /** Gate the entrance until the intro has finished. */
+  show: boolean;
+};
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = portfolioConfig.navigation.map(nav => nav.id);
-      const scrollPosition = window.scrollY + 100;
+/**
+ * Fixed left navigation. Enters with a staggered opacity + translateX
+ * reveal once the intro completes. The active-section dot uses a shared
+ * layoutId so it glides between items as you scroll.
+ */
+export function Navigation({ activeId, onNavigate, show }: NavigationProps) {
+  const container = {
+    hidden: {},
+    visible: {
+      transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+    },
+  };
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const handleNavClick = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+  const item = {
+    hidden: { opacity: 0, x: -12 },
+    visible: { opacity: 1, x: 0, transition: spring.soft },
   };
 
   return (
-    <nav className="fixed left-8 top-1/2 -translate-y-1/2 z-40">
-      <motion.ul 
-        className="space-y-8"
-        initial={{ opacity: 0, x: -50 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        {portfolioConfig.navigation.map((item, index) => (
-          <motion.li
-            key={item.id}
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-          >
-            <button
-              onClick={() => handleNavClick(item.href)}
-              className={`nav-link ${activeSection === item.id ? 'active' : ''}`}
-            >
-              {item.label}
-            </button>
-          </motion.li>
-        ))}
-      </motion.ul>
-    </nav>
+    <motion.nav
+      aria-label="Section navigation"
+      className="fixed left-8 top-1/2 z-40 hidden -translate-y-1/2 md:block"
+      variants={container}
+      initial="hidden"
+      animate={show ? "visible" : "hidden"}
+    >
+      <ul className="flex flex-col gap-5">
+        {navItems.map((nav) => {
+          const isActive = nav.id === activeId;
+          return (
+            <motion.li key={nav.id} variants={item}>
+              <button
+                type="button"
+                onClick={() => onNavigate(nav.id)}
+                className="group relative flex items-center gap-3 outline-none"
+                aria-current={isActive ? "true" : undefined}
+              >
+                <span className="relative flex h-1.5 w-1.5 items-center justify-center">
+                  {isActive && (
+                    <motion.span
+                      layoutId="nav-active-dot"
+                      className="absolute h-1.5 w-1.5 rounded-full bg-foreground"
+                      transition={spring.layout}
+                    />
+                  )}
+                  {!isActive && (
+                    <span className="h-1 w-1 rounded-full bg-white/25 transition-colors duration-300 group-hover:bg-white/50" />
+                  )}
+                </span>
+                <span
+                  className={`text-sm tracking-[0.02em] transition-opacity duration-300 ${
+                    isActive
+                      ? "text-foreground opacity-100"
+                      : "text-muted-foreground opacity-60 group-hover:opacity-100"
+                  }`}
+                  style={{ color: isActive ? undefined : "hsl(var(--muted-foreground))" }}
+                >
+                  {nav.label}
+                </span>
+              </button>
+            </motion.li>
+          );
+        })}
+      </ul>
+    </motion.nav>
   );
-};
-
-export default Navigation;
+}
